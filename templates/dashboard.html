@@ -18,6 +18,7 @@
         <nav>
             <a href="/"><i class="fa-solid fa-house"></i> Ana Sayfa</a>
             <a href="/dashboard" class="active"><i class="fa-solid fa-chart-pie"></i> Pano</a>
+            <a href="/map"><i class="fa-solid fa-map"></i> Bölgesel Harita</a>
             <a href="/assessment"><i class="fa-solid fa-stethoscope"></i> Risk Değerlendirmesi</a>
         </nav>
         <div class="system-status">SİSTEM: <span class="online">● ÇEVRİMİÇİ</span></div>
@@ -61,7 +62,6 @@
                     <canvas id="trendLineChart"></canvas>
                 </div>
             </div>
-
         </div>
     </main>
 
@@ -70,11 +70,9 @@
     </footer>
 
     <script>
-        // Ortak Grafik Ayarları (Koyu Tema İçin Yazı Renkleri)
         Chart.defaults.color = '#9ca3af';
         Chart.defaults.font.family = "'Inter', sans-serif";
 
-        // 1. Dairesel Risk Grafiği (Donut)
         const ctxDonut = document.getElementById('riskDonutChart').getContext('2d');
         new Chart(ctxDonut, {
             type: 'doughnut',
@@ -90,13 +88,10 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'bottom' }
-                }
+                plugins: { legend: { position: 'bottom' } }
             }
         });
 
-        // 2. Çizgi Trend Grafiği (Line)
         const ctxLine = document.getElementById('trendLineChart').getContext('2d');
         new Chart(ctxLine, {
             type: 'line',
@@ -119,9 +114,7 @@
                     x: { grid: { color: '#2d3748' } },
                     y: { grid: { color: '#2d3748' } }
                 },
-                plugins: {
-                    legend: { display: false }
-                }
+                plugins: { legend: { display: false } }
             }
         });
     </script>
