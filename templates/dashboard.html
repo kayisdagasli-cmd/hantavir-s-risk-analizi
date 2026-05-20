@@ -1,1 +1,129 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HantaRisk — Veri Analiz Panosu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
 
+    <header class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-shield-virus"></i> HANTARISK
+        </div>
+        <nav>
+            <a href="/"><i class="fa-solid fa-house"></i> Ana Sayfa</a>
+            <a href="/dashboard" class="active"><i class="fa-solid fa-chart-pie"></i> Pano</a>
+            <a href="/assessment"><i class="fa-solid fa-stethoscope"></i> Risk Değerlendirmesi</a>
+        </nav>
+        <div class="system-status">SİSTEM: <span class="online">● ÇEVRİMİÇİ</span></div>
+    </header>
+
+    <main class="assessment-container" style="max-width: 1000px;">
+        <h2 style="margin-bottom: 0.25rem;">Klinik Veri Analiz Panosu</h2>
+        <p class="subtitle">Genel vaka simülasyonları, risk dağılımları ve bölgesel istatistikler.</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            <div class="card" style="padding: 1.5rem; text-align: center; border-left: 4px solid var(--primary);">
+                <div style="color: var(--text-muted); font-size: 0.8rem; font-family: var(--font-mono);">TOPLAM ANALİZ</div>
+                <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--primary);">1,248</div>
+            </div>
+            <div class="card" style="padding: 1.5rem; text-align: center; border-left: 4px solid #ef4444;">
+                <div style="color: var(--text-muted); font-size: 0.8rem; font-family: var(--font-mono);">YÜKSEK RİSK ORANI</div>
+                <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: #ef4444;">%14.2</div>
+            </div>
+            <div class="card" style="padding: 1.5rem; text-align: center; border-left: 4px solid #f59e0b;">
+                <div style="color: var(--text-muted); font-size: 0.8rem; font-family: var(--font-mono);">ORTA RİSK ORANI</div>
+                <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: #f59e0b;">%32.5</div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
+            
+            <div class="card" style="padding: 2rem; display: flex; flex-direction: column; align-items: center;">
+                <h3 style="font-size: 1.1rem; margin-bottom: 1.5rem; font-family: var(--font-mono); align-self: flex-start; color: var(--primary);">
+                    <i class="fa-solid fa-chart-donut"></i> GENEL RİSK DAĞILIMI
+                </h3>
+                <div style="width: 250px; height: 250px;">
+                    <canvas id="riskDonutChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card" style="padding: 2rem;">
+                <h3 style="font-size: 1.1rem; margin-bottom: 1.5rem; font-family: var(--font-mono); color: var(--primary);">
+                    <i class="fa-solid fa-chart-line"></i> AYLIK MARUZİYET TRENDLERİ
+                </h3>
+                <div style="width: 100%; height: 250px;">
+                    <canvas id="trendLineChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        HantaRisk Klinik İstihbarat Platformu v1.0
+    </footer>
+
+    <script>
+        // Ortak Grafik Ayarları (Koyu Tema İçin Yazı Renkleri)
+        Chart.defaults.color = '#9ca3af';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+
+        // 1. Dairesel Risk Grafiği (Donut)
+        const ctxDonut = document.getElementById('riskDonutChart').getContext('2d');
+        new Chart(ctxDonut, {
+            type: 'doughnut',
+            data: {
+                labels: ['Düşük Risk', 'Orta Risk', 'Yüksek Risk'],
+                datasets: [{
+                    data: [53.3, 32.5, 14.2],
+                    backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                    borderColor: '#14181f',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // 2. Çizgi Trend Grafiği (Line)
+        const ctxLine = document.getElementById('trendLineChart').getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs'],
+                datasets: [{
+                    label: 'Simüle Edilen Şüpheli Vakalar',
+                    data: [42, 58, 65, 89, 120],
+                    borderColor: '#2dd4bf',
+                    backgroundColor: 'rgba(45, 212, 191, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { grid: { color: '#2d3748' } },
+                    y: { grid: { color: '#2d3748' } }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
