@@ -16,6 +16,7 @@
         </div>
         <nav>
             <a href="/"><i class="fa-solid fa-house"></i> Ana Sayfa</a>
+            <a href="/dashboard"><i class="fa-solid fa-chart-pie"></i> Pano</a>
             <a href="/map"><i class="fa-solid fa-map"></i> Bölgesel Harita</a>
             <a href="/assessment" class="active"><i class="fa-solid fa-stethoscope"></i> Risk Değerlendirmesi</a>
         </nav>
@@ -23,7 +24,7 @@
     </header>
 
     <main class="assessment-container">
-        <form id="calculationForm">
+        <form id="calculationForm" onsubmit="return false;">
             <div class="step-wizard">
                 <div class="step active" id="tab-1"><i class="fa-solid fa-user"></i> Kişisel Bilgiler</div>
                 <div class="step" id="tab-2"><i class="fa-solid fa-location-dot"></i> Maruziyet</div>
@@ -33,20 +34,20 @@
 
             <div class="card form-card">
                 <div class="form-step active" id="step-1">
-                    <h2>Kişisel Bilgiler</h2>
+                    <h2>Kırsal Bilgiler</h2>
                     <p class="subtitle">Temel kişisel bilgilerinizi ve konumunuzu girin.</p>
                     
                     <div class="input-group">
                         <label>AD SOYAD</label>
-                        <input type="text" id="ad_soyad" placeholder="Adınız Soyadınız" required>
+                        <input type="text" id="ad_soyad" placeholder="Adınız Soyadınız">
                     </div>
                     <div class="input-group">
-                        <label>YAŞ (18-65)</label>
-                        <input type="number" id="yas" min="18" max="65" placeholder="Yaşınız" required>
+                        <label>YAŞ (1-85)</label>
+                        <input type="number" id="yas" min="1" max="85" placeholder="Yaşınız">
                     </div>
                     <div class="input-group">
                         <label>YAŞADIĞINIZ BÖLGE</label>
-                        <select id="bolge" required>
+                        <select id="bolge">
                             <option value="Marmara">Marmara Bölgesi</option>
                             <option value="İç Anadolu">İç Anadolu Bölgesi</option>
                             <option value="Ege">Ege Bölgesi</option>
@@ -58,7 +59,7 @@
                     </div>
                     <div class="input-group">
                         <label>ÇEVRESEL ORTAM VE YAŞAM ALANI</label>
-                        <select id="cevre_tipi" required>
+                        <select id="cevre_tipi">
                             <option value="Kırsal Tarım">Kırsal / Tarım ve Hayvancılık Alanı</option>
                             <option value="Ormanlık">Ormanlık / Piknik ve Kamp Alanı</option>
                             <option value="Kentsel Yakın">Kentsel Çeper (Müstakil / Bahçeli Ev)</option>
@@ -74,7 +75,7 @@
                     
                     <div class="input-group" style="margin-bottom: 1.5rem;">
                         <label>BİYOLOJİK CİNSİYET</label>
-                        <select id="cinsiyet" required>
+                        <select id="cinsiyet">
                             <option value="1">Erkek</option>
                             <option value="0">Kadın</option>
                         </select>
