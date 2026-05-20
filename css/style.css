@@ -1,0 +1,165 @@
+/* ==========================================================================
+   HantaRisk Premium Dark Theme Stylesheet
+   ========================================================================== */
+
+:root {
+    --bg-main: #0a0d14;       /* Çok koyu lacivert/siyah arka plan */
+    --bg-card: #141822;       /* Kartlar için hafif açık koyu ton */
+    --primary: #2dd4bf;       /* Turkuaz (Canlı vurgular için) */
+    --primary-hover: #14b8a6;
+    --accent-bordo: #881337;   /* Bordo (Kritik uyarılar ve butonlar için) */
+    --accent-bordo-hover: #9f1239;
+    --text-main: #f3f4f6;     /* Parlak gri/beyaz yazı */
+    --text-muted: #9ca3af;    /* Sönük gri yazı */
+    --border-color: #1e293b;  /* İnce panel çizgileri */
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* --- NAVBAR (ÜST MENÜ) --- */
+.navbar {
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar .logo {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar nav {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.navbar nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.navbar nav a:hover, .navbar nav a.active {
+    color: var(--primary);
+}
+
+.system-status {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.system-status .online {
+    color: #10b981;
+    font-weight: bold;
+}
+
+/* --- ANA SAYFA (HERO) DÜZENİ --- */
+.hero-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-icon {
+    font-size: 4rem;
+    color: var(--accent-bordo);
+    margin-bottom: 1.5rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.05em;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+}
+
+/* --- BUTONLAR --- */
+.cta-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 4rem;
+}
+
+.btn {
+    padding: 0.8rem 1.8rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--accent-bordo);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-bordo-hover);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover
