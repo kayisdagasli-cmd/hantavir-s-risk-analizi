@@ -1,106 +1,324 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
+
+    // =========================
+    // ELEMENTLER
+    // =========================
     const steps = document.querySelectorAll(".form-step");
-    const nextButton = document.getElementById("btn-next");
-    const prevButton = document.getElementById("btn-back");
-    const wizardSteps = document.querySelectorAll(".step-wizard .step");
+    const wizardSteps = document.querySelectorAll(".step");
+
+    const nextBtn = document.getElementById("btn-next");
+    const backBtn = document.getElementById("btn-back");
+
     let currentStep = 0;
 
-    function showStep(stepIndex) {
-        steps.forEach((step, index) => {
-            step.classList.toggle("active", index === stepIndex);
-        });
-        wizardSteps.forEach((step, index) => {
-            step.classList.toggle("active", index === stepIndex);
+    // =========================
+    // STEP GÖSTER
+    // =========================
+    function showStep(index) {
+
+        steps.forEach((step, i) => {
+            step.classList.toggle("active", i === index);
         });
 
-        prevButton.disabled = stepIndex === 0;
-        
-        if (stepIndex === steps.length - 2) {
-            nextButton.innerHTML = 'HESAPLA <i class="fa-solid fa-wand-magic-sparkles"></i>';
-            nextButton.style.backgroundColor = '#8b0000'; // Bordo renk vurgusu
-        } else if (stepIndex === steps.length - 1) {
-            nextButton.style.display = 'none';
-            prevButton.style.display = 'none';
+        wizardSteps.forEach((step, i) => {
+            step.classList.toggle("active", i === index);
+        });
+
+        // Geri butonu
+        backBtn.disabled = index === 0;
+
+        // Sonuç ekranı
+        if (index === steps.length - 1) {
+
+            nextBtn.style.display = "none";
+            backBtn.style.display = "none";
+
         } else {
-            nextButton.innerHTML = 'İLERİ <i class="fa-solid fa-chevron-right"></i>';
-            nextButton.style.backgroundColor = ''; 
+
+            nextBtn.style.display = "flex";
+            backBtn.style.display = "flex";
+
+        }
+
+        // Hesapla butonu
+        if (index === steps.length - 2) {
+
+            nextBtn.innerHTML =
+                'ANALYZE RISK <i class="fa-solid fa-wand-magic-sparkles"></i>';
+
+            nextBtn.classList.add("danger-btn");
+
+        } else {
+
+            nextBtn.innerHTML =
+                'NEXT <i class="fa-solid fa-chevron-right"></i>';
+
+            nextBtn.classList.remove("danger-btn");
         }
     }
 
-    nextButton.addEventListener("click", function () {
+    // =========================
+    // NEXT
+    // =========================
+    nextBtn.addEventListener("click", async () => {
+
+        // Son adım öncesi -> API
         if (currentStep === steps.length - 2) {
-            hesaplaVeGonder();
-        } else if (currentStep < steps.length - 2) {
+
+            await analyzeRisk();
+
+        } else {
+
             currentStep++;
             showStep(currentStep);
+
         }
     });
 
-    prevButton.addEventListener("click", function () {
+    // =========================
+    // BACK
+    // =========================
+    backBtn.addEventListener("click", () => {
+
         if (currentStep > 0) {
+
             currentStep--;
             showStep(currentStep);
+
         }
     });
 
-    function hesaplaVeGonder() {
-        const formData = {
-            yas: parseInt(document.getElementById("yas").value) || 0,
-            cinsiyet: parseInt(document.getElementById("cinsiyet").value) || 0,
-            bolge: document.getElementById("bolge").value,
-            cevre_tipi: document.getElementById("cevre_tipi").value,
-            
-            // Maruziyetler
-            kirsal_temas: document.getElementById("kirsal_temas")?.checked ? 1 : 0,
-            kemirgen_temas: document.getElementById("kemirgen_temas")?.checked ? 1 : 0,
-            toz_maruziyeti: document.getElementById("toz_maruziyeti")?.checked ? 1 : 0,
-            son_seyahat: document.getElementById("son_seyahat")?.checked ? 1 : 0,
-            bagisiklik: document.getElementById("bagisiklik")?.checked ? 1 : 0,
-            
-            // Semptomlar
-            ates: document.getElementById("ates")?.checked ? 1 : 0,
-            kas_agrisi: document.getElementById("kas_agrisi")?.checked ? 1 : 0,
-            bas_agrisi: document.getElementById("bas_agrisi")?.checked ? 1 : 0,
-            yorgunluk: document.getElementById("yorgunluk")?.checked ? 1 : 0,
-            bulanti: document.getElementById("bulanti")?.checked ? 1 : 0,
-            nefes_darligi: document.getElementById("nefes_darligi")?.checked ? 1 : 0
-        };
+    // =========================
+    // ANALİZ
+    // =========================
+    async function analyzeRisk() {
 
-        const adSoyad = document.getElementById("ad_soyad").value || "Anonim Vaka";
+        try {
 
-        fetch("/predict", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                document.getElementById("res-isim").innerText = adSoyad + " — " + formData.bolge + " Bölgesi";
-                document.getElementById("riskScore").innerText = data.risk_score;
-                document.getElementById("riskStatus").innerText = "RİSK SEVİYESİ: " + data.risk_status;
-                
-                // Klinik dinamik öneriler ekleme alanı
-                const list = document.getElementById("suggestions-list");
-                list.innerHTML = ""; // Temizle
-                
-                if (formData.nefes_darligi) {
-                    list.innerHTML += "<li style='color: #ff4d4d; font-weight: bold;'><i class='fa-solid fa-circle-exclamation'></i> ACİL DURUM: Nefes darlığı hantavirüs için kritik bir evredir. En yakın sağlık kuruluşuna başvurun!</li>";
-                }
-                if (data.risk_score >= 50) {
-                    list.innerHTML += "<li><i class='fa-solid fa-triangle-exclamation'></i> Risk puanınız yüksek çıkmıştır. Kan tetkiki (Hantavirüs IgM/IgG) yaptırmanız önerilir.</li>";
-                } else {
-                    list.innerHTML += "<li><i class='fa-solid fa-circle-check'></i> Risk seviyeniz düşük seyrediyor. Hijyen kurallarına ve kemirgen kontrolüne devam edin.</li>";
-                }
+            // =========================
+            // LOADING
+            // =========================
+            nextBtn.innerHTML =
+                '<i class="fa-solid fa-spinner fa-spin"></i> ANALYZING...';
 
-                currentStep = steps.length - 1;
-                showStep(currentStep);
-            } else {
-                alert("Hata: " + data.error);
+            nextBtn.disabled = true;
+
+            // =========================
+            // FORM DATA
+            // =========================
+            const data = {
+
+                age: parseInt(document.getElementById("age").value) || 0,
+
+                gender: document.getElementById("gender").value,
+
+                fever:
+                    document.getElementById("fever").checked ? 1 : 0,
+
+                cough:
+                    document.getElementById("cough").checked ? 1 : 0,
+
+                breath_shortness:
+                    document.getElementById("breath_shortness").checked ? 1 : 0,
+
+                rodent_contact:
+                    document.getElementById("rodent_contact").checked ? 1 : 0,
+
+                humidity: Math.floor(Math.random() * 40) + 40,
+
+                temperature: Math.floor(Math.random() * 15) + 15
+            };
+
+            // =========================
+            // API REQUEST
+            // =========================
+            const response = await fetch("/api/predict", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            // =========================
+            // ERROR
+            // =========================
+            if (!result.success) {
+
+                alert(result.error || "Prediction failed.");
+
+                nextBtn.disabled = false;
+
+                return;
             }
-        })
-        .catch(error => {
-            alert("Sistem hatası: " + error.message);
-        });
+
+            // =========================
+            // RESULT UI
+            // =========================
+            renderResults(result, data);
+
+            // Son adıma geç
+            currentStep = steps.length - 1;
+
+            showStep(currentStep);
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("System error occurred.");
+
+        } finally {
+
+            nextBtn.disabled = false;
+
+        }
     }
+
+    // =========================
+    // RESULT RENDER
+    // =========================
+    function renderResults(result, formData) {
+
+        const scoreElement =
+            document.getElementById("riskScore");
+
+        const statusElement =
+            document.getElementById("riskStatus");
+
+        const suggestionsList =
+            document.getElementById("suggestions-list");
+
+        const patientText =
+            document.getElementById("res-isim");
+
+        // =========================
+        // HASTA BİLGİSİ
+        // =========================
+        patientText.innerText =
+            `Age ${formData.age} • ${formData.gender}`;
+
+        // =========================
+        // SCORE ANIMATION
+        // =========================
+        animateScore(
+            scoreElement,
+            result.risk_score
+        );
+
+        // =========================
+        // RISK STATUS
+        // =========================
+        statusElement.innerText =
+            result.risk_level.toUpperCase();
+
+        // =========================
+        // RISK COLORS
+        // =========================
+        if (result.risk_score < 40) {
+
+            statusElement.style.background =
+                "#1e8e3e";
+
+        } else if (result.risk_score < 70) {
+
+            statusElement.style.background =
+                "#f9a825";
+
+        } else {
+
+            statusElement.style.background =
+                "#c62828";
+        }
+
+        // =========================
+        // CLINICAL SUGGESTIONS
+        // =========================
+        suggestionsList.innerHTML = "";
+
+        // Kritik semptom
+        if (formData.breath_shortness) {
+
+            suggestionsList.innerHTML += `
+                <li class="danger-text">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    Severe respiratory symptom detected.
+                    Immediate medical evaluation recommended.
+                </li>
+            `;
+        }
+
+        // Risk bazlı öneriler
+        if (result.risk_score >= 70) {
+
+            suggestionsList.innerHTML += `
+                <li>
+                    <i class="fa-solid fa-virus"></i>
+                    High-risk clinical profile detected.
+                    Laboratory testing strongly recommended.
+                </li>
+            `;
+
+        } else if (result.risk_score >= 40) {
+
+            suggestionsList.innerHTML += `
+                <li>
+                    <i class="fa-solid fa-stethoscope"></i>
+                    Moderate risk detected.
+                    Monitor symptoms carefully.
+                </li>
+            `;
+
+        } else {
+
+            suggestionsList.innerHTML += `
+                <li>
+                    <i class="fa-solid fa-circle-check"></i>
+                    Low risk profile detected.
+                    Continue preventive measures.
+                </li>
+            `;
+        }
+
+        // Genel bilgi
+        suggestionsList.innerHTML += `
+            <li>
+                <i class="fa-solid fa-circle-info"></i>
+                AI prediction results are not a final diagnosis.
+            </li>
+        `;
+    }
+
+    // =========================
+    // SCORE ANIMATION
+    // =========================
+    function animateScore(element, targetScore) {
+
+        let current = 0;
+
+        const interval = setInterval(() => {
+
+            current++;
+
+            element.innerText = current;
+
+            if (current >= targetScore) {
+
+                clearInterval(interval);
+
+            }
+
+        }, 20);
+    }
+
+    // =========================
+    // INIT
+    // =========================
+    showStep(currentStep);
+
 });
