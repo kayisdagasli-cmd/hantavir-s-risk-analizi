@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>HantaRisk — Risk Haritası</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        <i class="fa-solid fa-shield-virus"></i>
+        HANTARISK
+    </div>
+
+    <nav>
+
+        <a href="/">
+            <i class="fa-solid fa-house"></i>
+            Ana Sayfa
+        </a>
+
+        <a href="/dashboard">
+            <i class="fa-solid fa-chart-pie"></i>
+            Dashboard
+        </a>
+
+        <a href="/harita" class="active">
+            <i class="fa-solid fa-map"></i>
+            Risk Haritası
+        </a>
+
+        <a href="/risk-degerlendirmesi">
+            <i class="fa-solid fa-stethoscope"></i>
+            Risk Analizi
+        </a>
+
+    </nav>
+
+    <div class="system-status">
+        SİSTEM:
+        <span class="online">● AKTİF</span>
+    </div>
+
+</header>
+
+<main class="assessment-container"
+      style="max-width:1300px;">
+
+    <div style="margin-bottom:2rem;">
+
+        <h1>
+            Türkiye Hantavirüs Risk Haritası
+        </h1>
+
+        <p class="subtitle">
+            Bölgesel yoğunluklar, kırsal temas riski ve epidemiyolojik analiz haritası.
+        </p>
+
+    </div>
+
+    <div class="card"
+         style="padding:1rem;">
+
+        <div id="map"
+             style="
+                width:100%;
+                height:700px;
+                border-radius:12px;
+             ">
+        </div>
+
+    </div>
+
+</main>
+
+<footer class="footer">
+    HantaRisk AI Epidemiological Intelligence Platform
+</footer>
+
+<script>
+
+    // =========================
+    // HARİTA OLUŞTUR
+    // =========================
+
+    const map = L.map('map').setView(
+        [39.0, 35.0],
+        6
+    );
+
+    // =========================
+    // DARK MAP
+    // =========================
+
+    L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+        {
+            attribution: '&copy; OpenStreetMap'
+        }
+    ).addTo(map);
+
+    // =========================
+    // RISK DATA
+    // =========================
+
+    const riskRegions = [
+
+        {
+            city: "İstanbul",
+            coords: [41.0082, 28.9784],
+            risk: "Orta Risk",
+            color: "#f59e0b"
+        },
+
+        {
+            city: "Ankara",
+            coords: [39.9334, 32.8597],
+            risk: "Düşük Risk",
+            color: "#10b981"
+        },
+
+        {
+            city: "Zonguldak",
+            coords: [41.4564, 31.7987],
+            risk: "Yüksek Risk",
+            color: "#ef4444"
+        },
+
+        {
+            city: "Samsun",
+            coords: [41.2867, 36.33],
+            risk: "Yüksek Risk",
+            color: "#ef4444"
+        },
+
+        {
+            city: "Trabzon",
+            coords: [41.0015, 39.7178],
+            risk: "Orta Risk",
+            color: "#f59e0b"
+        }
+
+    ];
+
+    // =========================
+    // MARKERS
+    // =========================
+
+    riskRegions.forEach(region => {
+
+        L.circleMarker(region.coords, {
+
+            radius: 14,
+
+            color: region.color,
+
+            fillColor: region.color,
+
+            fillOpacity: 0.6
+
+        })
+
+        .addTo(map)
+
+        .bindPopup(`
+            <div style="
+                color:black;
+                font-family:Arial;
+            ">
+                <h3>${region.city}</h3>
+                <p><b>Risk:</b> ${region.risk}</p>
+            </div>
+        `);
+
+    });
+
+</script>
+
+</body>
+</html>
