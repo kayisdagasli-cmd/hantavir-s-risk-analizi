@@ -1,122 +1,472 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HantaRisk — Veri Analiz Panosu</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>HantaRisk — Analytics Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+          rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
+
 <body>
 
-    <header class="navbar">
-        <div class="logo">
-            <i class="fa-solid fa-shield-virus"></i> HANTARISK
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<header class="navbar">
+
+    <div class="logo">
+        <i class="fa-solid fa-shield-virus"></i>
+        HANTARISK
+    </div>
+
+    <nav>
+
+        <a href="/">
+            <i class="fa-solid fa-house"></i>
+            Home
+        </a>
+
+        <a href="/dashboard" class="active">
+            <i class="fa-solid fa-chart-pie"></i>
+            Dashboard
+        </a>
+
+        <a href="/harita">
+            <i class="fa-solid fa-map"></i>
+            Risk Map
+        </a>
+
+        <a href="/risk-assessment">
+            <i class="fa-solid fa-stethoscope"></i>
+            Risk Assessment
+        </a>
+
+    </nav>
+
+    <div class="system-status">
+        SYSTEM:
+        <span class="online">● ONLINE</span>
+    </div>
+
+</header>
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="assessment-container"
+      style="max-width: 1300px;">
+
+    <!-- TITLE -->
+    <div style="margin-bottom: 2rem;">
+
+        <h1 style="font-size: 2.2rem;">
+            AI Clinical Analytics Dashboard
+        </h1>
+
+        <p class="subtitle">
+            Real-time hantavirus risk intelligence,
+            predictive analytics and epidemiological monitoring.
+        </p>
+
+    </div>
+
+    <!-- =========================
+         STATS
+    ========================= -->
+
+    <div class="features-grid"
+         style="margin-bottom: 2rem;">
+
+        <!-- TOTAL -->
+        <div class="card dashboard-card">
+
+            <div class="dashboard-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+
+            <div class="dashboard-value"
+                 id="totalPredictions">
+
+                {{ total_predictions }}
+
+            </div>
+
+            <div class="dashboard-label">
+                TOTAL ANALYSES
+            </div>
+
         </div>
-        <nav>
-            <a href="/"><i class="fa-solid fa-house"></i> Ana Sayfa</a>
-            <a href="/dashboard" class="active"><i class="fa-solid fa-chart-pie"></i> Pano</a>
-            <a href="/map"><i class="fa-solid fa-map"></i> Bölgesel Harita</a>
-            <a href="/assessment"><i class="fa-solid fa-stethoscope"></i> Risk Değerlendirmesi</a>
-        </nav>
-        <div class="system-status">SİSTEM: <span class="online">● ÇEVRİMİÇİ</span></div>
-    </header>
 
-    <main class="assessment-container" style="max-width: 1000px;">
-        <h2 style="margin-bottom: 0.25rem;">Klinik Veri Analiz Panosu</h2>
-        <p class="subtitle">Genel vaka simülasyonları, risk dağılımları ve bölgesel istatistikler.</p>
+        <!-- AVG RISK -->
+        <div class="card dashboard-card">
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-            <div class="card" style="padding: 1.5rem; text-align: center; border-left: 4px solid var(--primary);">
-                <div style="color: var(--text-muted); font-size: 0.8rem; font-family: var(--font-mono);">TOPLAM ANALİZ</div>
-                <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--primary);">1,248</div>
+            <div class="dashboard-icon warning-icon">
+                <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
-            <div class="card" style="padding: 1.5rem; text-align: center; border-left: 4px solid #ef4444;">
-                <div style="color: var(--text-muted); font-size: 0.8rem; font-family: var(--font-mono);">YÜKSEK RİSK ORANI</div>
-                <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: #ef4444;">%14.2</div>
+
+            <div class="dashboard-value"
+                 id="avgRisk">
+
+                {{ average_risk }}%
+
             </div>
-            <div class="card" style="padding: 1.5rem; text-align: center; border-left: 4px solid #f59e0b;">
-                <div style="color: var(--text-muted); font-size: 0.8rem; font-family: var(--font-mono);">ORTA RİSK ORANI</div>
-                <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: #f59e0b;">%32.5</div>
+
+            <div class="dashboard-label">
+                AVERAGE RISK SCORE
             </div>
+
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
-            
-            <div class="card" style="padding: 2rem; display: flex; flex-direction: column; align-items: center;">
-                <h3 style="font-size: 1.1rem; margin-bottom: 1.5rem; font-family: var(--font-mono); align-self: flex-start; color: var(--primary);">
-                    <i class="fa-solid fa-chart-donut"></i> GENEL RİSK DAĞILIMI
-                </h3>
-                <div style="width: 250px; height: 250px;">
-                    <canvas id="riskDonutChart"></canvas>
-                </div>
+        <!-- HIGH RISK -->
+        <div class="card dashboard-card">
+
+            <div class="dashboard-icon danger-icon">
+                <i class="fa-solid fa-virus"></i>
             </div>
 
-            <div class="card" style="padding: 2rem;">
-                <h3 style="font-size: 1.1rem; margin-bottom: 1.5rem; font-family: var(--font-mono); color: var(--primary);">
-                    <i class="fa-solid fa-chart-line"></i> AYLIK MARUZİYET TRENDLERİ
-                </h3>
-                <div style="width: 100%; height: 250px;">
-                    <canvas id="trendLineChart"></canvas>
-                </div>
+            <div class="dashboard-value"
+                 id="highRiskCount">
+
+                LIVE
+
             </div>
+
+            <div class="dashboard-label">
+                AI MONITORING ACTIVE
+            </div>
+
         </div>
-    </main>
 
-    <footer class="footer">
-        HantaRisk Klinik İstihbarat Platformu v1.0
-    </footer>
+    </div>
 
-    <script>
-        Chart.defaults.color = '#9ca3af';
-        Chart.defaults.font.family = "'Inter', sans-serif";
+    <!-- =========================
+         CHARTS
+    ========================= -->
 
-        const ctxDonut = document.getElementById('riskDonutChart').getContext('2d');
-        new Chart(ctxDonut, {
-            type: 'doughnut',
-            data: {
-                labels: ['Düşük Risk', 'Orta Risk', 'Yüksek Risk'],
-                datasets: [{
-                    data: [53.3, 32.5, 14.2],
-                    backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
-                    borderColor: '#14181f',
-                    borderWidth: 3
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom' } }
+    <div style="
+        display:grid;
+        grid-template-columns: repeat(auto-fit,minmax(450px,1fr));
+        gap:2rem;
+        margin-bottom:2rem;
+    ">
+
+        <!-- DONUT -->
+        <div class="card"
+             style="padding:2rem;">
+
+            <h3 class="chart-title">
+
+                <i class="fa-solid fa-chart-pie"></i>
+
+                Risk Distribution
+
+            </h3>
+
+            <div style="
+                height:350px;
+                position:relative;
+            ">
+
+                <canvas id="riskChart"></canvas>
+
+            </div>
+
+        </div>
+
+        <!-- LINE -->
+        <div class="card"
+             style="padding:2rem;">
+
+            <h3 class="chart-title">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                Epidemiological Trend
+
+            </h3>
+
+            <div style="
+                height:350px;
+                position:relative;
+            ">
+
+                <canvas id="trendChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+         RECENT PREDICTIONS
+    ========================= -->
+
+    <div class="card"
+         style="padding:2rem;">
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:1.5rem;
+        ">
+
+            <h3 class="chart-title">
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                Recent Clinical Predictions
+
+            </h3>
+
+            <span class="system-status">
+                DATABASE CONNECTED
+            </span>
+
+        </div>
+
+        <div style="overflow-x:auto;">
+
+            <table class="prediction-table">
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>AGE</th>
+                        <th>GENDER</th>
+                        <th>RISK SCORE</th>
+                        <th>STATUS</th>
+                        <th>DATE</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for row in recent_predictions %}
+
+                    <tr>
+
+                        <td>#{{ row.id }}</td>
+
+                        <td>{{ row.age }}</td>
+
+                        <td>{{ row.gender }}</td>
+
+                        <td>
+                            {{ row.risk_score }}%
+                        </td>
+
+                        <td>
+
+                            {% if row.risk_level == "High Risk" %}
+
+                                <span class="risk-pill high-risk">
+                                    HIGH
+                                </span>
+
+                            {% elif row.risk_level == "Moderate Risk" %}
+
+                                <span class="risk-pill medium-risk">
+                                    MEDIUM
+                                </span>
+
+                            {% else %}
+
+                                <span class="risk-pill low-risk">
+                                    LOW
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ row.created_at }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</main>
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer">
+
+    HantaRisk AI Epidemiological Intelligence Platform v2.0
+
+</footer>
+
+<!-- =========================
+     CHARTS
+========================= -->
+
+<script>
+
+    Chart.defaults.color = "#9ca3af";
+
+    Chart.defaults.font.family = "Inter";
+
+    // =========================
+    // DONUT
+    // =========================
+    const riskCtx =
+        document.getElementById("riskChart");
+
+    new Chart(riskCtx, {
+
+        type: "doughnut",
+
+        data: {
+
+            labels: [
+                "Low Risk",
+                "Moderate Risk",
+                "High Risk"
+            ],
+
+            datasets: [{
+
+                data: [52, 31, 17],
+
+                backgroundColor: [
+                    "#10b981",
+                    "#f59e0b",
+                    "#ef4444"
+                ],
+
+                borderWidth: 0
+
+            }]
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    position: "bottom"
+                }
+
             }
-        });
 
-        const ctxLine = document.getElementById('trendLineChart').getContext('2d');
-        new Chart(ctxLine, {
-            type: 'line',
-            data: {
-                labels: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs'],
-                datasets: [{
-                    label: 'Simüle Edilen Şüpheli Vakalar',
-                    data: [42, 58, 65, 89, 120],
-                    borderColor: '#2dd4bf',
-                    backgroundColor: 'rgba(45, 212, 191, 0.1)',
-                    fill: true,
-                    tension: 0.3,
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { grid: { color: '#2d3748' } },
-                    y: { grid: { color: '#2d3748' } }
+        }
+
+    });
+
+    // =========================
+    // LINE CHART
+    // =========================
+    const trendCtx =
+        document.getElementById("trendChart");
+
+    new Chart(trendCtx, {
+
+        type: "line",
+
+        data: {
+
+            labels: [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun"
+            ],
+
+            datasets: [{
+
+                label: "Clinical Cases",
+
+                data: [
+                    12,
+                    19,
+                    33,
+                    48,
+                    41,
+                    62
+                ],
+
+                borderColor: "#2dd4bf",
+
+                backgroundColor:
+                    "rgba(45,212,191,0.1)",
+
+                fill: true,
+
+                tension: 0.4
+
+            }]
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            scales: {
+
+                x: {
+
+                    grid: {
+                        color: "#1e293b"
+                    }
+
                 },
-                plugins: { legend: { display: false } }
+
+                y: {
+
+                    grid: {
+                        color: "#1e293b"
+                    }
+
+                }
+
             }
-        });
-    </script>
+
+        }
+
+    });
+
+</script>
+
 </body>
 </html>
