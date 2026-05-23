@@ -53,7 +53,7 @@
             Risk Map
         </a>
 
-        <a href="/risk-assessment">
+        <a href="/risk-degerlendirmesi">
             <i class="fa-solid fa-stethoscope"></i>
             Risk Assessment
         </a>
@@ -102,8 +102,7 @@
                 <i class="fa-solid fa-chart-line"></i>
             </div>
 
-            <div class="dashboard-value"
-                 id="totalPredictions">
+            <div class="dashboard-value">
 
                 {{ total_predictions }}
 
@@ -115,15 +114,14 @@
 
         </div>
 
-        <!-- AVG RISK -->
+        <!-- AVG -->
         <div class="card dashboard-card">
 
             <div class="dashboard-icon warning-icon">
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
 
-            <div class="dashboard-value"
-                 id="avgRisk">
+            <div class="dashboard-value">
 
                 {{ average_risk }}%
 
@@ -135,18 +133,15 @@
 
         </div>
 
-        <!-- HIGH RISK -->
+        <!-- STATUS -->
         <div class="card dashboard-card">
 
             <div class="dashboard-icon danger-icon">
                 <i class="fa-solid fa-virus"></i>
             </div>
 
-            <div class="dashboard-value"
-                 id="highRiskCount">
-
+            <div class="dashboard-value">
                 LIVE
-
             </div>
 
             <div class="dashboard-label">
@@ -217,7 +212,7 @@
     </div>
 
     <!-- =========================
-         RECENT PREDICTIONS
+         TABLE
     ========================= -->
 
     <div class="card"
@@ -279,13 +274,13 @@
 
                         <td>
 
-                            {% if row.risk_level == "High Risk" %}
+                            {% if row.risk_level == "Yüksek Risk" %}
 
                                 <span class="risk-pill high-risk">
                                     HIGH
                                 </span>
 
-                            {% elif row.risk_level == "Moderate Risk" %}
+                            {% elif row.risk_level == "Orta Risk" %}
 
                                 <span class="risk-pill medium-risk">
                                     MEDIUM
@@ -340,7 +335,7 @@
     Chart.defaults.font.family = "Inter";
 
     // =========================
-    // DONUT
+    // DONUT CHART
     // =========================
     const riskCtx =
         document.getElementById("riskChart");
@@ -359,7 +354,15 @@
 
             datasets: [{
 
-                data: [52, 31, 17],
+                data: [
+
+                    {{ low_count }},
+
+                    {{ medium_count }},
+
+                    {{ high_count }}
+
+                ],
 
                 backgroundColor: [
                     "#10b981",
@@ -402,27 +405,13 @@
 
         data: {
 
-            labels: [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun"
-            ],
+            labels: {{ trend_labels | tojson }},
 
             datasets: [{
 
                 label: "Clinical Cases",
 
-                data: [
-                    12,
-                    19,
-                    33,
-                    48,
-                    41,
-                    62
-                ],
+                data: {{ trend_values | tojson }},
 
                 borderColor: "#2dd4bf",
 
