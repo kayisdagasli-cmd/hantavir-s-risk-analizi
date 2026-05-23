@@ -1,188 +1,323 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HantaRisk — Risk Değerlendirmesi</title>
+    <title>HantaRisk — Risk Assessment</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+          rel="stylesheet">
 </head>
+
 <body>
 
-    <header class="navbar">
-        <div class="logo">
-            <i class="fa-solid fa-shield-virus"></i> HANTARISK
+<header class="navbar">
+
+    <div class="logo">
+        <i class="fa-solid fa-shield-virus"></i>
+        HANTARISK
+    </div>
+
+    <nav>
+        <a href="/">
+            <i class="fa-solid fa-house"></i>
+            Home
+        </a>
+
+        <a href="/dashboard">
+            <i class="fa-solid fa-chart-pie"></i>
+            Dashboard
+        </a>
+
+        <a href="/harita">
+            <i class="fa-solid fa-map"></i>
+            Risk Map
+        </a>
+
+        <a href="/risk-assessment" class="active">
+            <i class="fa-solid fa-stethoscope"></i>
+            Risk Assessment
+        </a>
+    </nav>
+
+    <div class="system-status">
+        SYSTEM:
+        <span class="online">● ONLINE</span>
+    </div>
+
+</header>
+
+<main class="assessment-container">
+
+    <form id="calculationForm" onsubmit="return false;">
+
+        <!-- STEP BAR -->
+        <div class="step-wizard">
+
+            <div class="step active" id="tab-1">
+                <i class="fa-solid fa-user"></i>
+                Demographics
+            </div>
+
+            <div class="step" id="tab-2">
+                <i class="fa-solid fa-location-dot"></i>
+                Exposure
+            </div>
+
+            <div class="step" id="tab-3">
+                <i class="fa-solid fa-temperature-high"></i>
+                Symptoms
+            </div>
+
+            <div class="step" id="tab-4">
+                <i class="fa-solid fa-square-poll-vertical"></i>
+                Results
+            </div>
+
         </div>
-        <nav>
-            <a href="/"><i class="fa-solid fa-house"></i> Ana Sayfa</a>
-            <a href="/dashboard"><i class="fa-solid fa-chart-pie"></i> Pano</a>
-            <a href="/map"><i class="fa-solid fa-map"></i> Bölgesel Harita</a>
-            <a href="/assessment" class="active"><i class="fa-solid fa-stethoscope"></i> Risk Değerlendirmesi</a>
-        </nav>
-        <div class="system-status">SİSTEM: <span class="online">● ÇEVRİMİÇİ</span></div>
-    </header>
 
-    <main class="assessment-container">
-        <form id="calculationForm" onsubmit="return false;">
-            <div class="step-wizard">
-                <div class="step active" id="tab-1"><i class="fa-solid fa-user"></i> Demografi</div>
-                <div class="step" id="tab-2"><i class="fa-solid fa-location-dot"></i> Maruziyet</div>
-                <div class="step" id="tab-3"><i class="fa-solid fa-temperature-high"></i> Belirtiler</div>
-                <div class="step" id="tab-4"><i class="fa-solid fa-square-poll-vertical"></i> Sonuç</div>
+        <!-- CARD -->
+        <div class="card form-card">
+
+            <!-- STEP 1 -->
+            <div class="form-step active" id="step-1">
+
+                <h2>Patient Demographics</h2>
+
+                <p class="subtitle">
+                    Enter patient demographic and environmental information.
+                </p>
+
+                <div class="input-group">
+                    <label>FULL NAME</label>
+                    <input type="text"
+                           id="full_name"
+                           placeholder="Enter full name">
+                </div>
+
+                <div class="input-group">
+                    <label>AGE</label>
+                    <input type="number"
+                           id="age"
+                           min="1"
+                           max="100"
+                           placeholder="Patient age">
+                </div>
+
+                <div class="input-group">
+                    <label>GENDER</label>
+
+                    <select id="gender">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>REGION</label>
+
+                    <select id="region">
+                        <option>Urban Area</option>
+                        <option>Rural Area</option>
+                        <option>Forest Area</option>
+                        <option>Industrial Area</option>
+                    </select>
+                </div>
+
             </div>
 
-            <div class="card form-card">
-                <div class="form-step active" id="step-1">
-                    <h2>Kişisel Bilgiler & Demografi</h2>
-                    <p class="subtitle">Temel bilgilerinizi, yaşınızı ve yaşadığınız bölgeyi seçin.</p>
-                    
-                    <div class="input-group">
-                        <label>AD SOYAD</label>
-                        <input type="text" id="ad_soyad" placeholder="Adınız Soyadınız">
-                    </div>
-                    <div class="input-group">
-                        <label>YAŞ (1-85)</label>
-                        <input type="number" id="yas" min="1" max="85" placeholder="Yaşınız">
-                    </div>
-                    <div class="input-group">
-                        <label>BİYOLOJİK CİNSİYET</label>
-                        <select id="cinsiyet">
-                            <option value="1">Erkek</option>
-                            <option value="0">Kadın</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>YAŞADIĞINIZ BÖLGE</label>
-                        <select id="bolge">
-                            <option value="Marmara">Marmara Bölgesi</option>
-                            <option value="İç Anadolu">İç Anadolu Bölgesi</option>
-                            <option value="Ege">Ege Bölgesi</option>
-                            <option value="Akdeniz">Akdeniz Bölgesi</option>
-                            <option value="Karadeniz">Karadeniz Bölgesi</option>
-                            <option value="Güneydoğu Anadolu">Güneydoğu Anadolu Bölgesi</option>
-                            <option value="Doğu Anadolu">Doğu Anadolu Bölgesi</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>ÇEVRESEL ORTAM VE YAŞAM ALANI</label>
-                        <select id="cevre_tipi">
-                            <option value="Kırsal Tarım">Kırsal / Tarım ve Hayvancılık Alanı</option>
-                            <option value="Ormanlık">Ormanlık / Piknik ve Kamp Alanı</option>
-                            <option value="Kentsel Yakın">Kentsel Çeper (Müstakil / Bahçeli Ev)</option>
-                            <option value="Yoğun Kent">Yoğun Kent Merkezi (Apartman Yaşamı)</option>
-                            <option value="Depo Şantiye">Endüstriyel Alan / Depo / Şantiye</option>
-                        </select>
-                    </div>
+            <!-- STEP 2 -->
+            <div class="form-step" id="step-2">
+
+                <h2>Exposure Factors</h2>
+
+                <p class="subtitle">
+                    Select possible exposure conditions.
+                </p>
+
+                <div class="checkbox-tile">
+                    <input type="checkbox" id="rodent_contact">
+
+                    <label for="rodent_contact">
+                        <span class="tile-title">
+                            Rodent Contact
+                        </span>
+
+                        <span class="tile-desc">
+                            Exposure to rodents or contaminated environments.
+                        </span>
+                    </label>
                 </div>
 
-                <div class="form-step" id="step-2">
-                    <h2>Maruziyet Faktörleri</h2>
-                    <p class="subtitle">Son 1 ay içerisindeki çevresel ve biyolojik maruziyet durumları.</p>
-                    
-                    <div class="checkbox-tile">
-                        <input type="checkbox" id="kirsal_temas">
-                        <label for="kirsal_temas">
-                            <span class="tile-title">Kırsal Alan ve Açık Hava Aktivitesi</span>
-                            <span class="tile-desc">Tarım, ormancılık, kamp, avcılık veya kırsal arazide bulunma</span>
-                        </label>
-                    </div>
-                    <div class="checkbox-tile">
-                        <input type="checkbox" id="kemirgen_temas">
-                        <label for="kemirgen_temas">
-                            <span class="tile-title">Doğrudan Kemirgen Teması</span>
-                            <span class="tile-desc">Fare/kemirgen veya bunlara ait salgı, dışkı, yuva yerleriyle temas</span>
-                        </label>
-                    </div>
-                    <div class="checkbox-tile">
-                        <input type="checkbox" id="toz_maruziyeti">
-                        <label for="toz_maruziyeti">
-                            <span class="tile-title">Kapalı Ortam Toz Maruziyeti</span>
-                            <span class="tile-desc">Eski depo, tavan arası, ahır, odunluk gibi havasız alanların temizliği/tozu</span>
-                        </label>
-                    </div>
-                    <div class="checkbox-tile">
-                        <input type="checkbox" id="son_seyahat">
-                        <label for="son_seyahat">
-                            <span class="tile-title">Endemik Bölge Seyahati</span>
-                            <span class="tile-desc">Hantavirüs vakalarının daha sık görüldüğü kırsal/yurt dışı bölgelere seyahat</span>
-                        </label>
-                    </div>
-                    <div class="checkbox-tile">
-                        <input type="checkbox" id="bagisiklik">
-                        <label for="bagisiklik">
-                            <span class="tile-title">Kronik Rahatsızlık / Bağışıklık Baskılanması</span>
-                            <span class="tile-desc">Bağışıklık sistemini zayıflatan ilaç kullanımı veya kronik organ hastalıkları</span>
-                        </label>
-                    </div>
+                <div class="checkbox-tile">
+                    <input type="checkbox" id="dust_exposure">
+
+                    <label for="dust_exposure">
+                        <span class="tile-title">
+                            Dust Exposure
+                        </span>
+
+                        <span class="tile-desc">
+                            Exposure to contaminated dust particles.
+                        </span>
+                    </label>
                 </div>
 
-                <div class="form-step" id="step-3">
-                    <h2>Klinik Semptomlar</h2>
-                    <p class="subtitle">Mevcut olarak yaşadığınız belirtileri işaretleyin.</p>
-                    
-                    <div class="symptoms-grid">
-                        <div class="symptom-card">
-                            <input type="checkbox" id="ates">
-                            <label for="ates"><i class="fa-solid fa-fire"></i> Yüksek Ateş</label>
-                        </div>
-                        <div class="symptom-card">
-                            <input type="checkbox" id="kas_agrisi">
-                            <label for="kas_agrisi"><i class="fa-solid fa-bone"></i> Şiddetli Kas Ağrısı</label>
-                        </div>
-                        <div class="symptom-card">
-                            <input type="checkbox" id="bas_agrisi">
-                            <label for="bas_agrisi"><i class="fa-solid fa-head-side-virus"></i> Baş Ağrısı</label>
-                        </div>
-                        <div class="symptom-card">
-                            <input type="checkbox" id="yorgunluk">
-                            <label for="yorgunluk"><i class="fa-solid fa-battery-quarter"></i> Aşırı Halsizlik</label>
-                        </div>
-                        <div class="symptom-card">
-                            <input type="checkbox" id="bulanti">
-                            <label for="bulanti"><i class="fa-solid fa-stomach"></i> Bulantı / Kusma</label>
-                        </div>
-                        <div class="symptom-card">
-                            <input type="checkbox" id="nefes_darligi">
-                            <label for="nefes_darligi"><i class="fa-solid fa-lungs"></i> Nefes Darlığı</label>
-                        </div>
-                    </div>
+                <div class="checkbox-tile">
+                    <input type="checkbox" id="travel_history">
+
+                    <label for="travel_history">
+                        <span class="tile-title">
+                            Endemic Area Travel
+                        </span>
+
+                        <span class="tile-desc">
+                            Recent travel to high-risk endemic regions.
+                        </span>
+                    </label>
                 </div>
 
-                <div class="form-step" id="step-4">
-                    <div class="result-header">
-                        <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
-                        <h2>Değerlendirme Analizi Tamamlandı</h2>
-                        <p id="res-isim" class="patient-name">Hasta Adı — Bölge</p>
-                    </div>
-
-                    <div class="score-container">
-                        <div class="progress-circle">
-                            <span id="riskScore">0</span><span class="small-percent">%</span>
-                        </div>
-                        <div class="risk-badge" id="riskStatus">RİSK SEVİYESİ: TESPİT EDİLİYOR</div>
-                    </div>
-
-                    <div class="suggestions-box">
-                        <h3><i class="fa-solid fa-triangle-exclamation"></i> KLİNİK TAKİP ÖNERİLERİ</h3>
-                        <ul id="suggestions-list">
-                            <li><i class="fa-solid fa-circle-info"></i> Hesaplanan risk skoru model çıktısıdır, kesin teşhis için hekim kontrolü gereklidir.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="form-navigation" id="nav-buttons">
-                    <button type="button" class="btn btn-secondary" id="btn-back" disabled><i class="fa-solid fa-chevron-left"></i> GERİ</button>
-                    <button type="button" class="btn btn-primary" id="btn-next">İLERİ <i class="fa-solid fa-chevron-right"></i></button>
-                </div>
             </div>
-        </form>
-    </main>
 
-    <footer class="footer">
-        HantaRisk Klinik İstihbarat Platformu v1.0
-    </footer>
+            <!-- STEP 3 -->
+            <div class="form-step" id="step-3">
 
-    <script src="{{ url_for('static', filename='js/form.js') }}"></script>
+                <h2>Clinical Symptoms</h2>
+
+                <p class="subtitle">
+                    Select all active symptoms.
+                </p>
+
+                <div class="symptoms-grid">
+
+                    <div class="symptom-card">
+                        <input type="checkbox" id="fever">
+                        <label for="fever">
+                            <i class="fa-solid fa-fire"></i>
+                            Fever
+                        </label>
+                    </div>
+
+                    <div class="symptom-card">
+                        <input type="checkbox" id="cough">
+                        <label for="cough">
+                            <i class="fa-solid fa-head-side-cough"></i>
+                            Cough
+                        </label>
+                    </div>
+
+                    <div class="symptom-card">
+                        <input type="checkbox" id="fatigue">
+                        <label for="fatigue">
+                            <i class="fa-solid fa-battery-quarter"></i>
+                            Fatigue
+                        </label>
+                    </div>
+
+                    <div class="symptom-card">
+                        <input type="checkbox" id="breath_shortness">
+                        <label for="breath_shortness">
+                            <i class="fa-solid fa-lungs"></i>
+                            Shortness of Breath
+                        </label>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- STEP 4 -->
+            <div class="form-step" id="step-4">
+
+                <div class="result-header">
+
+                    <div class="success-icon">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+
+                    <h2>Risk Analysis Completed</h2>
+
+                    <p id="res-isim" class="patient-name">
+                        Patient Analysis Result
+                    </p>
+
+                </div>
+
+                <div class="score-container">
+
+                    <div class="progress-circle">
+
+                        <span id="riskScore">0</span>
+                        <span class="small-percent">%</span>
+
+                    </div>
+
+                    <div class="risk-badge" id="riskStatus">
+                        ANALYZING...
+                    </div>
+
+                </div>
+
+                <div class="suggestions-box">
+
+                    <h3>
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Clinical Recommendations
+                    </h3>
+
+                    <ul id="suggestions-list">
+
+                        <li>
+                            <i class="fa-solid fa-circle-info"></i>
+                            AI-generated prediction. Clinical confirmation required.
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <!-- NAVIGATION -->
+            <div class="form-navigation" id="nav-buttons">
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        id="btn-back"
+                        disabled>
+
+                    <i class="fa-solid fa-chevron-left"></i>
+                    BACK
+
+                </button>
+
+                <button type="button"
+                        class="btn btn-primary"
+                        id="btn-next">
+
+                    NEXT
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</main>
+
+<footer class="footer">
+    HantaRisk AI Clinical Intelligence Platform v2.0
+</footer>
+
+<script src="{{ url_for('static', filename='js/form.js') }}"></script>
+
 </body>
 </html>
