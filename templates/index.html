@@ -1,85 +1,306 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HantaRisk — Klinik İstihbarat & Risk Analizi</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>HantaRisk — AI Clinical Intelligence Platform</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+          rel="stylesheet">
+
 </head>
+
 <body>
 
-    <header class="navbar">
-        <div class="logo">
-            <i class="fa-solid fa-shield-virus"></i> HANTARISK
-        </div>
-        <nav>
-            <a href="/" class="active"><i class="fa-solid fa-house"></i> Ana Sayfa</a>
-            <a href="/dashboard"><i class="fa-solid fa-chart-pie"></i> Pano</a>
-            <a href="/map"><i class="fa-solid fa-map"></i> Bölgesel Harita</a>
-            <a href="/assessment"><i class="fa-solid fa-stethoscope"></i> Risk Değerlendirmesi</a>
-        </nav>
-        <div class="system-status">SİSTEM: <span class="online">● ÇEVRİMİÇİ</span></div>
-    </header>
+<!-- =========================
+     NAVBAR
+========================= -->
 
-    <main class="assessment-container" style="max-width: 900px;">
-        <div class="card" style="text-align: center; padding: 4rem 2rem;">
-            <div style="font-size: 4.5rem; color: var(--primary); margin-bottom: 1.5rem; filter: drop-shadow(0 0 15px rgba(45, 212, 191, 0.3));">
-                <i class="fa-solid fa-microscope"></i>
-            </div>
-            
-            <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: -0.5px;">
-                Hantavirus Erken Risk Analiz Platformu
-            </h1>
-            
-            <p class="subtitle" style="max-width: 600px; margin: 0 auto 3rem auto; line-height: 1.6; font-size: 1.1rem;">
-                Makine öğrenmesi algoritmaları ve klinik veri ağırlıkları kullanarak, kemirgen maruziyeti ve semptom takibi üzerinden kişiselleştirilmiş risk skorlaması gerçekleştirin.
+<header class="navbar">
+
+    <div class="logo">
+        <i class="fa-solid fa-shield-virus"></i>
+        HANTARISK
+    </div>
+
+    <nav>
+
+        <a href="/" class="active">
+            <i class="fa-solid fa-house"></i>
+            Ana Sayfa
+        </a>
+
+        <a href="/dashboard">
+            <i class="fa-solid fa-chart-pie"></i>
+            Dashboard
+        </a>
+
+        <a href="/harita">
+            <i class="fa-solid fa-map-location-dot"></i>
+            Risk Haritası
+        </a>
+
+        <a href="/risk-degerlendirmesi">
+            <i class="fa-solid fa-stethoscope"></i>
+            Risk Analizi
+        </a>
+
+    </nav>
+
+    <div class="system-status">
+        SİSTEM:
+        <span class="online">● ONLINE</span>
+    </div>
+
+</header>
+
+<!-- =========================
+     HERO SECTION
+========================= -->
+
+<main class="hero-container">
+
+    <div class="hero-icon">
+        <i class="fa-solid fa-virus-covid"></i>
+    </div>
+
+    <h1>
+        Hantavirus AI Risk Intelligence Platform
+    </h1>
+
+    <p class="subtitle">
+
+        Makine öğrenmesi destekli epidemiyolojik analiz sistemi ile
+        hantavirüs maruziyet riskini değerlendirin,
+        klinik belirtileri analiz edin
+        ve bölgesel yoğunluk haritalarını inceleyin.
+
+    </p>
+
+    <!-- BUTTONS -->
+
+    <div class="cta-group">
+
+        <a href="/risk-degerlendirmesi"
+           class="btn btn-primary">
+
+            <i class="fa-solid fa-play"></i>
+
+            RİSK ANALİZİNİ BAŞLAT
+
+        </a>
+
+        <a href="/dashboard"
+           class="btn btn-secondary">
+
+            <i class="fa-solid fa-chart-line"></i>
+
+            ANALİTİK PANEL
+
+        </a>
+
+    </div>
+
+    <!-- ALERT BOX -->
+
+    <div class="card"
+         style="
+            width:100%;
+            margin-bottom:2rem;
+            border-left:4px solid #ef4444;
+         ">
+
+        <h3>
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            Epidemiyolojik Uyarı Sistemi
+        </h3>
+
+        <p>
+
+            Kemirgen teması, kapalı alan toz maruziyeti,
+            kırsal çevre faktörleri ve akut semptom kombinasyonları
+            AI modeli tarafından analiz edilmektedir.
+
+        </p>
+
+    </div>
+
+    <!-- FEATURES -->
+
+    <div class="features-grid">
+
+        <!-- FEATURE 1 -->
+
+        <div class="card">
+
+            <h3>
+
+                <i class="fa-solid fa-brain"></i>
+
+                Yapay Zeka Modeli
+
+            </h3>
+
+            <p>
+
+                Random Forest algoritması kullanılarak
+                çok değişkenli klinik risk sınıflandırması yapılır.
+
             </p>
 
-            <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
-                <a href="/assessment" class="btn btn-primary" style="text-decoration: none; padding: 1.25rem 2.5rem; font-size: 1rem; border-radius: 8px;">
-                    RISK DEĞERLENDİRMESİ BAŞLAT <i class="fa-solid fa-play"></i>
-                </a>
-                <a href="/dashboard" class="btn btn-secondary" style="text-decoration: none; padding: 1.25rem 2.5rem; font-size: 1rem; border-radius: 8px;">
-                    VERİ PANOSUNU İNCELE <i class="fa-solid fa-chart-line"></i>
-                </a>
-            </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
-            <div class="card" style="padding: 1.5rem; border-radius: 8px;">
-                <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--primary);">
-                    <i class="fa-solid fa-brain"></i> ML Algoritması
-                </h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
-                    Arka planda çalışan Random Forest (Rastgele Orman) modeli, girilen çok boyutlu semptom ilişkilerini analiz ederek sınıflandırma yapar.
-                </p>
-            </div>
+        <!-- FEATURE 2 -->
 
-            <div class="card" style="padding: 1.5rem; border-radius: 8px;">
-                <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--primary);">
-                    <i class="fa-solid fa-database"></i> Ağırlıklı Veri Modeli
-                </h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
-                    Çevresel maruziyet faktörleri, kırsal/kentsel bölge değişkenleri ve akut klinik belirtiler tıbbi literatür ağırlıklarıyla optimize edilmiştir.
-                </p>
-            </div>
+        <div class="card">
 
-            <div class="card" style="padding: 1.5rem; border-radius: 8px;">
-                <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--primary);">
-                    <i class="fa-solid fa-user-shield"></i> Gizlilik & Güvenlik
-                </h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
-                    Analiz tamamen anlık tarayıcı oturumu üzerinden yürütülür. Girilen kişisel tahmin parametreleri sunucu üzerinde kalıcı olarak depolanmaz.
-                </p>
-            </div>
+            <h3>
+
+                <i class="fa-solid fa-database"></i>
+
+                Veri Analitiği
+
+            </h3>
+
+            <p>
+
+                Kaggle hantavirus surveillance dataset üzerinden
+                eğitilmiş epidemiyolojik veri modeli kullanılır.
+
+            </p>
+
         </div>
-    </main>
 
-    <footer class="footer">
-        HantaRisk Klinik İstihbarat Platformu v1.0
-    </footer>
+        <!-- FEATURE 3 -->
+
+        <div class="card">
+
+            <h3>
+
+                <i class="fa-solid fa-map-location-dot"></i>
+
+                Risk Haritaları
+
+            </h3>
+
+            <p>
+
+                Bölgesel yoğunluk ve kırsal maruziyet alanları
+                interaktif harita sistemi ile görüntülenir.
+
+            </p>
+
+        </div>
+
+        <!-- FEATURE 4 -->
+
+        <div class="card">
+
+            <h3>
+
+                <i class="fa-solid fa-shield-heart"></i>
+
+                Klinik Destek
+
+            </h3>
+
+            <p>
+
+                Sistem yalnızca destek amaçlıdır.
+                Kesin tanı için uzman hekim değerlendirmesi gerekir.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- LIVE NEWS -->
+
+    <div class="card"
+         style="
+            width:100%;
+            margin-top:2rem;
+            text-align:left;
+         ">
+
+        <h3 style="margin-bottom:1rem;">
+
+            <i class="fa-solid fa-newspaper"></i>
+
+            Güncel Hantavirus Haberleri
+
+        </h3>
+
+        {% if news %}
+
+            {% for article in news %}
+
+                <div style="
+                    padding:1rem 0;
+                    border-bottom:1px solid var(--border-color);
+                ">
+
+                    <a href="{{ article.url }}"
+                       target="_blank"
+                       style="
+                            color:var(--text-main);
+                            text-decoration:none;
+                            font-weight:600;
+                       ">
+
+                        {{ article.title }}
+
+                    </a>
+
+                    <p style="
+                        color:var(--text-muted);
+                        margin-top:0.5rem;
+                        font-size:0.85rem;
+                    ">
+
+                        {{ article.source.name }}
+
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p style="color:var(--text-muted);">
+
+                Güncel haber verisi alınamadı.
+
+            </p>
+
+        {% endif %}
+
+    </div>
+
+</main>
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer">
+
+    HantaRisk AI Epidemiological Intelligence Platform v2.0
+
+</footer>
 
 </body>
 </html>
